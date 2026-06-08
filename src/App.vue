@@ -1,5 +1,7 @@
 <template>
-  <main class="app-shell">
-    <h1>FeHelper Worker Tools</h1>
-  </main>
+  <AppShell />
 </template>
+
+<script setup lang="ts">
+import AppShell from './components/AppShell.vue';
+</script>
