@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { dateInputToTimestamp, formatInTimeZone, timestampToDateParts } from '../src/utils/time';
+import {
+  buildTimeZoneOptions,
+  dateInputToTimestamp,
+  formatInTimeZone,
+  timestampToDateParts
+} from '../src/utils/time';
 
 describe('time utilities', () => {
   it('converts millisecond timestamps to date parts', () => {
@@ -51,5 +56,13 @@ describe('time utilities', () => {
 
     expect(formatInTimeZone(date, 'UTC')).toBe('2024-01-01 00:00:00');
     expect(formatInTimeZone(date, 'Asia/Shanghai')).toBe('2024-01-01 08:00:00');
+  });
+
+  it('builds labeled timezone options with city and GMT offset', () => {
+    const options = buildTimeZoneOptions(new Date('2024-01-01T00:00:00.000Z'));
+    const shanghai = options.find((option) => option.value === 'Asia/Shanghai');
+
+    expect(shanghai?.label).toContain('北京');
+    expect(shanghai?.label).toContain('GMT+8');
   });
 });

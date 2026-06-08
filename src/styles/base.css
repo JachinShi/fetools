@@ -92,9 +92,17 @@ button {
   color: #344054;
 }
 
-.nav-collapsed .brand-copy,
-.nav-collapsed .sidebar-toggle {
+.nav-collapsed .brand-copy {
   display: none;
+}
+
+.nav-collapsed .brand {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-collapsed .sidebar-toggle {
+  margin-left: 0;
 }
 
 .brand p,
@@ -375,6 +383,18 @@ select,
   overflow: auto;
 }
 
+.diff-inline-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.diff-inline-grid h4 {
+  margin: 0 0 8px;
+  color: #344054;
+  font-size: 13px;
+}
+
 .diff-row {
   display: grid;
   grid-template-columns: 64px minmax(120px, 220px) minmax(0, 1fr);
@@ -400,6 +420,18 @@ select,
 
 .diff-row.unchanged {
   border-left-color: #94a3b8;
+}
+
+.diff-bg-added {
+  background: #dcfce7;
+}
+
+.diff-bg-removed {
+  background: #fee2e2;
+}
+
+.diff-bg-changed {
+  background: #fef3c7;
 }
 
 .diff-type {
@@ -445,8 +477,12 @@ select,
   gap: 4px;
   min-height: 24px;
   min-width: 0;
-  white-space: normal;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+}
+
+.diff-tree-line {
+  border-radius: 6px;
+  padding-right: 6px;
 }
 
 .tree-line:hover .tree-actions {
@@ -502,12 +538,18 @@ select,
 
 .json-key {
   color: #7c3aed;
-  overflow-wrap: anywhere;
+  flex: 0 0 auto;
+  max-width: 42%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .json-string {
   color: #047857;
+  min-width: 0;
   overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .json-number {
@@ -529,9 +571,20 @@ select,
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(220px, auto);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   align-items: stretch;
+}
+
+.timestamp-control-panel {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.timestamp-control-panel .form-row {
+  margin: 0;
 }
 
 .timestamp-actions {
@@ -605,7 +658,9 @@ select,
   .two-column,
   .split-editors,
   .formatter-layout,
+  .diff-inline-grid,
   .stats-grid,
+  .timestamp-control-panel,
   .diff-row {
     grid-template-columns: 1fr;
   }

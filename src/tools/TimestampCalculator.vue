@@ -17,18 +17,24 @@
         <span>毫秒时间戳</span>
         <strong>{{ current.milliseconds }}</strong>
       </div>
-      <div class="timestamp-actions">
-        <select v-model="selectedTimeZone" title="模拟时区">
+    </div>
+
+    <div class="panel timestamp-control-panel">
+      <div class="form-row">
+        <label for="timezone-select">模拟时区</label>
+        <select id="timezone-select" v-model="selectedTimeZone">
           <option v-for="zone in timeZones" :key="zone.value" :value="zone.value">
             {{ zone.label }}
           </option>
         </select>
+      </div>
+      <div class="timestamp-actions">
         <button type="button" class="primary-button" @click="toggleAutoRefresh">
           <Pause v-if="autoRefresh" :size="17" />
           <Play v-else :size="17" />
-          {{ autoRefresh ? '停止' : '继续' }}
+          {{ autoRefresh ? '停止刷新' : '继续刷新' }}
         </button>
-        <button type="button" class="icon-button" title="刷新" @click="refreshNow">
+        <button type="button" class="icon-button" title="立即刷新" @click="refreshNow">
           <RefreshCcw :size="17" />
         </button>
       </div>
@@ -99,6 +105,7 @@
 import { computed, onBeforeUnmount, ref } from 'vue';
 import { Copy, Pause, Play, RefreshCcw } from 'lucide-vue-next';
 import {
+  buildTimeZoneOptions,
   currentDateParts,
   dateInputToTimestamp,
   formatInTimeZone,
@@ -107,14 +114,8 @@ import {
   type TimestampUnit
 } from '../utils/time';
 
-const timeZones = [
-  { label: '本地时区', value: Intl.DateTimeFormat().resolvedOptions().timeZone },
-  { label: 'UTC', value: 'UTC' },
-  { label: 'Asia/Shanghai', value: 'Asia/Shanghai' },
-  { label: 'America/New_York', value: 'America/New_York' },
-  { label: 'Europe/London', value: 'Europe/London' },
-  { label: 'Asia/Tokyo', value: 'Asia/Tokyo' }
-];
+const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const timeZones = buildTimeZoneOptions();
 
 const current = ref<DateParts>(currentDateParts());
 const result = ref<DateParts>(current.value);
@@ -125,7 +126,7 @@ const timestampError = ref('');
 const dateError = ref('');
 const status = ref('等待转换');
 const autoRefresh = ref(true);
-const selectedTimeZone = ref(timeZones[0].value);
+const selectedTimeZone = ref(localTimeZone);
 const zonedCurrent = computed(() =>
   formatInTimeZone(new Date(current.value.milliseconds), selectedTimeZone.value)
 );

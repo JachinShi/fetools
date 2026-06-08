@@ -152,11 +152,12 @@ function startResize(event: PointerEvent) {
 }
 
 async function copyOutput() {
-  if (!output.value) {
+  const latest = parsedValue.value === null ? output.value : JSON.stringify(parsedValue.value, null, 2);
+  if (!latest) {
     status.value = '没有可复制内容';
     return;
   }
-  await navigator.clipboard?.writeText(output.value);
+  await navigator.clipboard?.writeText(latest);
   status.value = '已复制输出';
 }
 
