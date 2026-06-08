@@ -58,11 +58,21 @@ describe('time utilities', () => {
     expect(formatInTimeZone(date, 'Asia/Shanghai')).toBe('2024-01-01 08:00:00');
   });
 
-  it('builds labeled timezone options with city and GMT offset', () => {
-    const options = buildTimeZoneOptions(new Date('2024-01-01T00:00:00.000Z'));
-    const shanghai = options.find((option) => option.value === 'Asia/Shanghai');
+  it('builds the fixed simulated timezone option list', () => {
+    const options = buildTimeZoneOptions();
 
-    expect(shanghai?.label).toContain('北京');
-    expect(shanghai?.label).toContain('GMT+8');
+    expect(options).toHaveLength(23);
+    expect(options[0]).toEqual({
+      label: '中途岛 (GMT-11)',
+      value: 'Pacific/Midway'
+    });
+    expect(options.at(-1)).toEqual({
+      label: '奥克兰 (GMT+12)',
+      value: 'Pacific/Auckland'
+    });
+    expect(options).toContainEqual({
+      label: '北京 (GMT+8)',
+      value: 'Asia/Shanghai'
+    });
   });
 });

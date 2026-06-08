@@ -389,6 +389,39 @@ select,
   gap: 16px;
 }
 
+.diff-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin: 0 0 12px;
+  color: #667085;
+  font-size: 13px;
+}
+
+.diff-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-swatch {
+  width: 16px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.legend-swatch.added {
+  background: #dcfce7;
+}
+
+.legend-swatch.removed {
+  background: #fee2e2;
+}
+
+.legend-swatch.changed {
+  background: #fef3c7;
+}
+
 .diff-inline-grid h4 {
   margin: 0 0 8px;
   color: #344054;

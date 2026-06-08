@@ -32,6 +32,11 @@
           对比
         </button>
       </div>
+      <div class="diff-legend" aria-label="差异底色说明">
+        <span><i class="legend-swatch added"></i>绿色：新增</span>
+        <span><i class="legend-swatch removed"></i>红色：删除</span>
+        <span><i class="legend-swatch changed"></i>黄色：修改</span>
+      </div>
       <div v-if="leftParsed && rightParsed" class="diff-inline-grid">
         <div>
           <h4>左侧</h4>
