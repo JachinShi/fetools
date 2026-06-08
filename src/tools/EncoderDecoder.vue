@@ -1,5 +1,5 @@
 <template>
-  <section class="tool-grid two-column">
+  <section class="tool-stack">
     <div class="panel">
       <div class="panel-header">
         <h3>源文本</h3>
@@ -7,18 +7,40 @@
           <Trash2 :size="17" />
         </button>
       </div>
-      <textarea v-model="source" class="code-editor" spellcheck="false" />
-      <div class="form-row">
-        <label for="encoding-mode">转换方式</label>
-        <select id="encoding-mode" v-model="mode">
-          <option value="url-encode">URL Encode</option>
-          <option value="url-decode">URL Decode</option>
-          <option value="base64-encode">Base64 Encode</option>
-          <option value="base64-decode">Base64 Decode</option>
-          <option value="html-encode">HTML Entity Encode</option>
-          <option value="html-decode">HTML Entity Decode</option>
-        </select>
+      <textarea v-model="source" class="code-editor compact-editor" spellcheck="false" />
+
+      <div class="mode-tabs" role="tablist" aria-label="转换类型">
+        <button
+          type="button"
+          class="mode-tab"
+          :class="{ active: activeGroup === 'encode' }"
+          @click="setGroup('encode')"
+        >
+          加密/编码
+        </button>
+        <button
+          type="button"
+          class="mode-tab"
+          :class="{ active: activeGroup === 'decode' }"
+          @click="setGroup('decode')"
+        >
+          解密/解码
+        </button>
       </div>
+
+      <div class="operation-grid">
+        <button
+          v-for="operation in operations"
+          :key="operation.mode"
+          type="button"
+          class="operation-button"
+          :class="{ active: mode === operation.mode }"
+          @click="mode = operation.mode"
+        >
+          {{ operation.label }}
+        </button>
+      </div>
+
       <button type="button" class="primary-button" @click="convert">
         <ArrowRightLeft :size="17" />
         转换
@@ -33,25 +55,37 @@
           <Copy :size="17" />
         </button>
       </div>
-      <textarea v-model="result" class="code-editor" spellcheck="false" readonly />
+      <textarea v-model="result" class="code-editor compact-editor" spellcheck="false" readonly />
       <p class="hint-text">{{ status }}</p>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { ArrowRightLeft, Copy, Trash2 } from 'lucide-vue-next';
-import { convertEncoding, type EncodingMode } from '../utils/encoding';
+import {
+  convertEncoding,
+  decodeOperations,
+  encodeOperations,
+  type EncodingMode
+} from '../utils/encoding';
 
 const source = ref('FeTools 中文 & tools');
+const activeGroup = ref<'encode' | 'decode'>('encode');
 const mode = ref<EncodingMode>('url-encode');
 const result = ref('');
 const error = ref('');
 const status = ref('等待转换');
+const operations = computed(() => (activeGroup.value === 'encode' ? encodeOperations : decodeOperations));
 
-function convert() {
-  const converted = convertEncoding(source.value, mode.value);
+function setGroup(group: 'encode' | 'decode') {
+  activeGroup.value = group;
+  mode.value = operations.value[0].mode;
+}
+
+async function convert() {
+  const converted = await convertEncoding(source.value, mode.value);
   if (converted.ok) {
     result.value = converted.value;
     error.value = '';
