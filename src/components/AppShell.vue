@@ -5,7 +5,6 @@
         <span class="brand-mark">FT</span>
         <div class="brand-copy">
           <h1>FeTools</h1>
-          <p>Developer Tools</p>
         </div>
         <button
           type="button"
