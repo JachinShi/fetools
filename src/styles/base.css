@@ -293,12 +293,117 @@ select,
   font-weight: 800;
 }
 
-.diff-row code,
-.diff-row pre {
+.diff-row code {
   margin: 0;
   overflow: auto;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   font-size: 12px;
+}
+
+.json-tree {
+  min-height: 360px;
+  overflow: auto;
+  border: 1px solid #cfd6e3;
+  border-radius: 8px;
+  background: #fbfcfe;
+  color: #111827;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  padding: 10px;
+}
+
+.diff-row .json-tree {
+  min-height: 0;
+  max-height: 240px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.tree-node {
+  min-width: max-content;
+}
+
+.tree-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+  white-space: nowrap;
+}
+
+.tree-line:hover .tree-actions {
+  opacity: 1;
+}
+
+.tree-children {
+  margin-left: 20px;
+}
+
+.tree-toggle,
+.tree-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #667085;
+  padding: 0;
+}
+
+.tree-toggle:hover,
+.tree-action:hover {
+  border-color: #cfd6e3;
+  background: #ffffff;
+  color: #1d4ed8;
+}
+
+.tree-action.danger:hover {
+  color: #b42318;
+}
+
+.tree-spacer {
+  width: 22px;
+  height: 22px;
+}
+
+.tree-actions {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 8px;
+  opacity: 0;
+}
+
+.tree-summary {
+  color: #667085;
+}
+
+.json-key {
+  color: #7c3aed;
+}
+
+.json-string {
+  color: #047857;
+}
+
+.json-number {
+  color: #b45309;
+}
+
+.json-boolean {
+  color: #2563eb;
+}
+
+.json-null {
+  color: #9f1239;
+}
+
+.json-punctuation {
+  color: #475467;
 }
 
 .stats-grid {

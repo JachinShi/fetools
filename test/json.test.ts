@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { compactJson, formatJson, parseJson } from '../src/utils/json';
+import {
+  compactJson,
+  deleteJsonPath,
+  formatJson,
+  parseJson,
+  parseJsonInput
+} from '../src/utils/json';
 
 describe('json utilities', () => {
   it('formats valid JSON with two-space indentation', () => {
@@ -24,5 +30,33 @@ describe('json utilities', () => {
     if (!result.ok) {
       expect(result.error).toContain('Invalid JSON');
     }
+  });
+
+  it('parses JSON text with escaped quotes', () => {
+    const result = parseJsonInput('{\\"name\\":\\"FeHelper\\"}');
+
+    expect(result).toEqual({ ok: true, value: { name: 'FeHelper' } });
+  });
+
+  it('parses JSON strings that contain escaped JSON text', () => {
+    const result = parseJsonInput('"{\\"name\\":\\"FeHelper\\"}"');
+
+    expect(result).toEqual({ ok: true, value: { name: 'FeHelper' } });
+  });
+
+  it('deletes nested object properties immutably', () => {
+    const source = { user: { name: 'Ada', age: 36 }, active: true };
+    const result = deleteJsonPath(source, ['user', 'age']);
+
+    expect(result).toEqual({ user: { name: 'Ada' }, active: true });
+    expect(source).toEqual({ user: { name: 'Ada', age: 36 }, active: true });
+  });
+
+  it('deletes array items immutably', () => {
+    const source = { items: ['a', 'b', 'c'] };
+    const result = deleteJsonPath(source, ['items', 1]);
+
+    expect(result).toEqual({ items: ['a', 'c'] });
+    expect(source).toEqual({ items: ['a', 'b', 'c'] });
   });
 });

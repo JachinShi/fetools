@@ -36,7 +36,13 @@
         <div v-for="entry in displayEntries" :key="entry.key" class="diff-row" :class="entry.type">
           <span class="diff-type">{{ entry.label }}</span>
           <code>{{ entry.path }}</code>
-          <pre>{{ entry.value }}</pre>
+          <JsonTree
+            v-if="entry.treeValue !== undefined"
+            :value="entry.treeValue"
+            :root-label="entry.path"
+            readonly
+            @copy-node="copyNode"
+          />
         </div>
         <p v-if="!entries.length" class="hint-text">运行对比后显示结构差异。</p>
       </div>
@@ -47,7 +53,8 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue';
 import { GitCompareArrows, Wand2 } from 'lucide-vue-next';
-import { formatJson, parseJson } from '../utils/json';
+import JsonTree from '../components/JsonTree.vue';
+import { formatJson, parseJsonInput, type JsonValue } from '../utils/json';
 import { diffJsonValues, type DiffType, type JsonDiffEntry } from '../utils/jsonDiff';
 
 const left = ref('{"name":"FeHelper","version":1,"enabled":true}');
@@ -61,7 +68,7 @@ const displayEntries = computed(() =>
     path: entry.path || '$',
     type: entry.type,
     label: labelFor(entry.type),
-    value: valueFor(entry)
+    treeValue: valueFor(entry)
   }))
 );
 
@@ -78,8 +85,8 @@ function formatSide(side: 'left' | 'right') {
 }
 
 function compare() {
-  const leftResult = parseJson(left.value);
-  const rightResult = parseJson(right.value);
+  const leftResult = parseJsonInput(left.value);
+  const rightResult = parseJsonInput(right.value);
   leftError.value = leftResult.ok ? '' : leftResult.error;
   rightError.value = rightResult.ok ? '' : rightResult.error;
 
@@ -97,13 +104,17 @@ function labelFor(type: DiffType): string {
   }[type];
 }
 
-function valueFor(entry: JsonDiffEntry): string {
+function valueFor(entry: JsonDiffEntry): JsonValue {
   if (entry.type === 'added') {
-    return JSON.stringify(entry.right, null, 2);
+    return entry.right ?? null;
   }
   if (entry.type === 'removed') {
-    return JSON.stringify(entry.left, null, 2);
+    return entry.left ?? null;
   }
-  return JSON.stringify({ left: entry.left, right: entry.right }, null, 2);
+  return { left: entry.left ?? null, right: entry.right ?? null };
+}
+
+async function copyNode(value: JsonValue) {
+  await navigator.clipboard?.writeText(JSON.stringify(value, null, 2));
 }
 </script>
