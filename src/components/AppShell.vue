@@ -2,10 +2,10 @@
   <main class="app-layout" :class="{ 'nav-collapsed': sidebarCollapsed }">
     <aside class="sidebar">
       <div class="brand">
-        <span class="brand-mark">FH</span>
+        <span class="brand-mark">FT</span>
         <div class="brand-copy">
-          <h1>FeHelper</h1>
-          <p>Worker Tools</p>
+          <h1>FeTools</h1>
+          <p>Developer Tools</p>
         </div>
         <button
           type="button"

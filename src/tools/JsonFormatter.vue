@@ -19,7 +19,7 @@
           </button>
         </div>
       </div>
-      <JsonCodeEditor v-model="source" placeholder='{"name":"FeHelper"}' />
+      <JsonCodeEditor v-model="source" placeholder='{"name":"FeTools"}' />
       <p v-if="error" class="error-text">{{ error }}</p>
     </div>
 
@@ -77,7 +77,7 @@ import {
   type JsonValue
 } from '../utils/json';
 
-const source = ref('{\n  "name": "FeHelper",\n  "tools": ["json", "diff"]\n}');
+const source = ref('{\n  "name": "FeTools",\n  "tools": ["json", "diff"]\n}');
 const output = ref('');
 const parsedValue = shallowRef<JsonValue | null>(null);
 const error = ref('');

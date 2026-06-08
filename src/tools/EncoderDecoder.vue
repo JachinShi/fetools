@@ -44,7 +44,7 @@ import { ref } from 'vue';
 import { ArrowRightLeft, Copy, Trash2 } from 'lucide-vue-next';
 import { convertEncoding, type EncodingMode } from '../utils/encoding';
 
-const source = ref('FeHelper 中文 & tools');
+const source = ref('FeTools 中文 & tools');
 const mode = ref<EncodingMode>('url-encode');
 const result = ref('');
 const error = ref('');

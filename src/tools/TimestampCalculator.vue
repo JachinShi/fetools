@@ -70,32 +70,16 @@
     <div class="panel">
       <div class="panel-header">
         <h3>转换结果</h3>
-        <button type="button" class="icon-button" title="复制 ISO" @click="copyIso">
-          <Copy :size="17" />
-        </button>
       </div>
-      <dl class="result-list">
-        <div>
-          <dt>模拟时区时间</dt>
-          <dd>{{ zonedResult }}</dd>
+      <div class="result-copy-list">
+        <div v-for="item in resultItems" :key="item.label" class="result-copy-row">
+          <span>{{ item.label }}</span>
+          <code>{{ item.value }}</code>
+          <button type="button" class="icon-button" :title="`复制${item.label}`" @click="copyValue(item.label, item.value)">
+            <Copy :size="17" />
+          </button>
         </div>
-        <div>
-          <dt>本地输入格式</dt>
-          <dd>{{ result.localInput }}</dd>
-        </div>
-        <div>
-          <dt>ISO</dt>
-          <dd>{{ result.iso }}</dd>
-        </div>
-        <div>
-          <dt>秒</dt>
-          <dd>{{ result.seconds }}</dd>
-        </div>
-        <div>
-          <dt>毫秒</dt>
-          <dd>{{ result.milliseconds }}</dd>
-        </div>
-      </dl>
+      </div>
       <p class="hint-text">{{ status }}</p>
     </div>
   </section>
@@ -133,6 +117,13 @@ const zonedCurrent = computed(() =>
 const zonedResult = computed(() =>
   formatInTimeZone(new Date(result.value.milliseconds), selectedTimeZone.value)
 );
+const resultItems = computed(() => [
+  { label: '模拟时区时间', value: zonedResult.value },
+  { label: '本地输入格式', value: result.value.localInput },
+  { label: 'ISO', value: result.value.iso },
+  { label: '秒', value: String(result.value.seconds) },
+  { label: '毫秒', value: String(result.value.milliseconds) }
+]);
 const timer = window.setInterval(() => {
   if (autoRefresh.value) {
     current.value = currentDateParts();
@@ -175,8 +166,8 @@ function convertDate() {
   }
 }
 
-async function copyIso() {
-  await navigator.clipboard?.writeText(result.value.iso);
-  status.value = '已复制 ISO';
+async function copyValue(label: string, value: string) {
+  await navigator.clipboard?.writeText(value);
+  status.value = `已复制${label}`;
 }
 </script>

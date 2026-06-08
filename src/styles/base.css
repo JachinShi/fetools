@@ -638,7 +638,7 @@ select,
 }
 
 .stat span,
-.result-list dt {
+.result-copy-row span {
   display: block;
   color: #667085;
   font-size: 12px;
@@ -646,19 +646,38 @@ select,
 }
 
 .stat strong,
-.result-list dd {
+.result-copy-row code {
   display: block;
-  margin: 4px 0 0;
   overflow-wrap: anywhere;
   color: #111827;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   font-size: 14px;
 }
 
-.result-list {
+.stat strong {
+  margin: 4px 0 0;
+}
+
+.result-copy-list {
   display: grid;
+  gap: 8px;
+}
+
+.result-copy-row {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) 34px;
   gap: 10px;
-  margin: 0;
+  align-items: center;
+  min-height: 42px;
+  border: 1px solid #e4e7ec;
+  border-radius: 8px;
+  background: #fbfcfe;
+  padding: 6px 8px 6px 12px;
+}
+
+.result-copy-row code {
+  overflow: auto;
+  white-space: nowrap;
 }
 
 @media (max-width: 900px) {
@@ -696,6 +715,14 @@ select,
   .timestamp-control-panel,
   .diff-row {
     grid-template-columns: 1fr;
+  }
+
+  .result-copy-row {
+    grid-template-columns: 1fr 34px;
+  }
+
+  .result-copy-row span {
+    grid-column: 1 / -1;
   }
 
   .formatter-layout {

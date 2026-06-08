@@ -60,8 +60,8 @@ import JsonDiffTree from '../components/JsonDiffTree.vue';
 import { formatJson, parseJsonInput, type JsonValue } from '../utils/json';
 import { diffJsonValues, type DiffType, type JsonDiffEntry } from '../utils/jsonDiff';
 
-const left = ref('{"name":"FeHelper","version":1,"enabled":true}');
-const right = ref('{"name":"FeHelper","version":2,"mode":"worker"}');
+const left = ref('{"name":"FeTools","version":1,"enabled":true}');
+const right = ref('{"name":"FeTools","version":2,"mode":"worker"}');
 const leftError = ref('');
 const rightError = ref('');
 const leftParsed = shallowRef<JsonValue | null>(null);

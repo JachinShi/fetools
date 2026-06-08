@@ -9,11 +9,11 @@ import {
 
 describe('json utilities', () => {
   it('formats valid JSON with two-space indentation', () => {
-    const result = formatJson('{"name":"FeHelper","items":[1,true,null]}');
+    const result = formatJson('{"name":"FeTools","items":[1,true,null]}');
 
     expect(result).toEqual({
       ok: true,
-      value: '{\n  "name": "FeHelper",\n  "items": [\n    1,\n    true,\n    null\n  ]\n}'
+      value: '{\n  "name": "FeTools",\n  "items": [\n    1,\n    true,\n    null\n  ]\n}'
     });
   });
 
@@ -33,15 +33,15 @@ describe('json utilities', () => {
   });
 
   it('parses JSON text with escaped quotes', () => {
-    const result = parseJsonInput('{\\"name\\":\\"FeHelper\\"}');
+    const result = parseJsonInput('{\\"name\\":\\"FeTools\\"}');
 
-    expect(result).toEqual({ ok: true, value: { name: 'FeHelper' } });
+    expect(result).toEqual({ ok: true, value: { name: 'FeTools' } });
   });
 
   it('parses JSON strings that contain escaped JSON text', () => {
-    const result = parseJsonInput('"{\\"name\\":\\"FeHelper\\"}"');
+    const result = parseJsonInput('"{\\"name\\":\\"FeTools\\"}"');
 
-    expect(result).toEqual({ ok: true, value: { name: 'FeHelper' } });
+    expect(result).toEqual({ ok: true, value: { name: 'FeTools' } });
   });
 
   it('deletes nested object properties immutably', () => {

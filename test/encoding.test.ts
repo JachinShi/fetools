@@ -14,13 +14,13 @@ describe('encoding utilities', () => {
   });
 
   it('encodes and decodes Base64 Unicode text', () => {
-    const encoded = convertEncoding('FeHelper 中文', 'base64-encode');
+    const encoded = convertEncoding('FeTools 中文', 'base64-encode');
 
     expect(encoded.ok).toBe(true);
     if (encoded.ok) {
       expect(convertEncoding(encoded.value, 'base64-decode')).toEqual({
         ok: true,
-        value: 'FeHelper 中文'
+        value: 'FeTools 中文'
       });
     }
   });
