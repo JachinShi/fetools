@@ -9,22 +9,32 @@
       </div>
       <textarea v-model="source" class="code-editor compact-editor" spellcheck="false" />
 
-      <div class="mode-tabs" role="tablist" aria-label="转换类型">
-        <button
-          type="button"
-          class="mode-tab"
-          :class="{ active: activeGroup === 'encode' }"
-          @click="setGroup('encode')"
-        >
-          加密/编码
-        </button>
-        <button
-          type="button"
-          class="mode-tab"
-          :class="{ active: activeGroup === 'decode' }"
-          @click="setGroup('decode')"
-        >
-          解密/解码
+      <div class="encoding-controlbar">
+        <div class="mode-tabs" role="tablist" aria-label="转换类型">
+          <button
+            type="button"
+            class="mode-tab"
+            :class="{ active: activeGroup === 'encode' }"
+            @click="setGroup('encode')"
+          >
+            加密/编码
+          </button>
+          <button
+            type="button"
+            class="mode-tab"
+            :class="{ active: activeGroup === 'decode' }"
+            @click="setGroup('decode')"
+          >
+            解密/解码
+          </button>
+        </div>
+        <div class="current-operation">
+          <span>当前操作</span>
+          <strong>{{ selectedOperation?.label }}</strong>
+        </div>
+        <button type="button" class="primary-button convert-button" @click="convert">
+          <ArrowRightLeft :size="17" />
+          转换
         </button>
       </div>
 
@@ -37,14 +47,10 @@
           :class="{ active: mode === operation.mode }"
           @click="mode = operation.mode"
         >
+          <span class="operation-dot"></span>
           {{ operation.label }}
         </button>
       </div>
-
-      <button type="button" class="primary-button" @click="convert">
-        <ArrowRightLeft :size="17" />
-        转换
-      </button>
       <p v-if="error" class="error-text">{{ error }}</p>
     </div>
 
@@ -78,6 +84,7 @@ const result = ref('');
 const error = ref('');
 const status = ref('等待转换');
 const operations = computed(() => (activeGroup.value === 'encode' ? encodeOperations : decodeOperations));
+const selectedOperation = computed(() => operations.value.find((operation) => operation.mode === mode.value));
 
 function setGroup(group: 'encode' | 'decode') {
   activeGroup.value = group;

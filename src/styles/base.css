@@ -306,10 +306,17 @@ button {
   min-height: 220px;
 }
 
+.encoding-controlbar {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  margin: 14px 0 12px;
+}
+
 .mode-tabs {
   display: inline-flex;
   gap: 4px;
-  margin: 14px 0 10px;
   border: 1px solid #cfd6e3;
   border-radius: 8px;
   background: #f8fafc;
@@ -332,21 +339,47 @@ button {
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.08);
 }
 
+.current-operation {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  color: #667085;
+  font-size: 13px;
+}
+
+.current-operation strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #111827;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.convert-button {
+  min-width: 92px;
+}
+
 .operation-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 8px;
-  margin-bottom: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 10px;
 }
 
 .operation-button {
-  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 34px;
   border: 1px solid #cfd6e3;
   border-radius: 8px;
   background: #ffffff;
   color: #344054;
-  padding: 0 10px;
+  padding: 0 9px;
   text-align: left;
+  font-size: 13px;
 }
 
 .operation-button.active {
@@ -354,6 +387,18 @@ button {
   background: #eaf1ff;
   color: #1d4ed8;
   font-weight: 700;
+}
+
+.operation-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #cfd6e3;
+}
+
+.operation-button.active .operation-dot {
+  background: #1d4ed8;
 }
 
 .json-code-editor {
@@ -767,8 +812,17 @@ select,
   .diff-inline-grid,
   .stats-grid,
   .timestamp-control-panel,
+  .encoding-controlbar,
   .diff-row {
     grid-template-columns: 1fr;
+  }
+
+  .operation-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .current-operation {
+    align-items: center;
   }
 
   .result-copy-row {
@@ -814,5 +868,11 @@ select,
 
   .nav-collapsed .sidebar-toggle {
     display: inline-flex;
+  }
+}
+
+@media (max-width: 520px) {
+  .operation-grid {
+    grid-template-columns: 1fr;
   }
 }
