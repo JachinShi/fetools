@@ -19,7 +19,7 @@
           </button>
         </div>
       </div>
-      <textarea v-model="source" class="code-editor" spellcheck="false" placeholder='{"name":"FeHelper"}' />
+      <JsonCodeEditor v-model="source" placeholder='{"name":"FeHelper"}' />
       <p v-if="error" class="error-text">{{ error }}</p>
     </div>
 
@@ -66,6 +66,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue';
 import { Columns2, Copy, Minimize2, Rows3, Trash2, Wand2 } from 'lucide-vue-next';
+import JsonCodeEditor from '../components/JsonCodeEditor.vue';
 import JsonTree from '../components/JsonTree.vue';
 import {
   compactJson,
@@ -95,6 +96,7 @@ const layoutStyle = computed(() =>
 function applyResult(result: ReturnType<typeof formatJson>) {
   if (result.ok) {
     output.value = result.value;
+    source.value = result.value;
     const parsed = parseJsonInput(result.value);
     parsedValue.value = parsed.ok ? parsed.value : null;
     error.value = '';

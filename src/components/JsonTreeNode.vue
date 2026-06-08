@@ -13,8 +13,8 @@
       </button>
       <span v-else class="tree-spacer"></span>
 
-      <span v-if="nodeKey !== undefined" class="json-key">{{ displayKey }}</span>
-      <span v-if="nodeKey !== undefined" class="json-punctuation">:</span>
+      <span v-if="showKey" class="json-key">{{ displayKey }}</span>
+      <span v-if="showKey" class="json-punctuation">:</span>
 
       <span v-if="isContainer" class="json-punctuation">{{ containerOpen }}</span>
       <template v-else>
@@ -101,6 +101,7 @@ const containerClose = computed(() => (isArray.value ? ']' : '}'));
 const displayKey = computed(() =>
   typeof props.nodeKey === 'number' ? props.nodeKey : `"${props.nodeKey}"`
 );
+const showKey = computed(() => typeof props.nodeKey === 'string');
 const summary = computed(() => {
   if (Array.isArray(props.value)) {
     return `${props.value.length} items`;

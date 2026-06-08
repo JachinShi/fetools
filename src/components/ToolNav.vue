@@ -1,11 +1,12 @@
 <template>
-  <nav class="tool-nav" aria-label="工具导航">
+  <nav class="tool-nav" :class="{ collapsed }" aria-label="工具导航">
     <button
       v-for="tool in tools"
       :key="tool.id"
       type="button"
       class="nav-item"
       :class="{ active: modelValue === tool.id }"
+      :title="collapsed ? tool.label : undefined"
       @click="$emit('update:modelValue', tool.id)"
     >
       <component :is="tool.icon" :size="18" aria-hidden="true" />
@@ -24,6 +25,7 @@ defineProps<{
     label: string;
     icon: Component;
   }[];
+  collapsed?: boolean;
 }>();
 
 defineEmits<{

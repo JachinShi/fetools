@@ -1,7 +1,6 @@
 <template>
   <div class="json-tree">
     <JsonTreeNode
-      :node-key="rootLabel"
       :value="value"
       :path="[]"
       :root="true"
@@ -19,11 +18,9 @@ import JsonTreeNode from './JsonTreeNode.vue';
 withDefaults(
   defineProps<{
     value: JsonValue;
-    rootLabel?: string;
     readonly?: boolean;
   }>(),
   {
-    rootLabel: '$',
     readonly: false
   }
 );

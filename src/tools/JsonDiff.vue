@@ -8,7 +8,7 @@
             <Wand2 :size="17" />
           </button>
         </div>
-        <textarea v-model="left" class="code-editor" spellcheck="false" />
+        <JsonCodeEditor v-model="left" />
         <p v-if="leftError" class="error-text">{{ leftError }}</p>
       </div>
 
@@ -19,7 +19,7 @@
             <Wand2 :size="17" />
           </button>
         </div>
-        <textarea v-model="right" class="code-editor" spellcheck="false" />
+        <JsonCodeEditor v-model="right" />
         <p v-if="rightError" class="error-text">{{ rightError }}</p>
       </div>
     </div>
@@ -53,6 +53,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue';
 import { GitCompareArrows, Wand2 } from 'lucide-vue-next';
+import JsonCodeEditor from '../components/JsonCodeEditor.vue';
 import JsonTree from '../components/JsonTree.vue';
 import { formatJson, parseJsonInput, type JsonValue } from '../utils/json';
 import { diffJsonValues, type DiffType, type JsonDiffEntry } from '../utils/jsonDiff';

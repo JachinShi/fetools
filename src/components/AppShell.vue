@@ -1,14 +1,23 @@
 <template>
-  <main class="app-layout">
+  <main class="app-layout" :class="{ 'nav-collapsed': sidebarCollapsed }">
     <aside class="sidebar">
       <div class="brand">
         <span class="brand-mark">FH</span>
-        <div>
+        <div class="brand-copy">
           <h1>FeHelper</h1>
           <p>Worker Tools</p>
         </div>
+        <button
+          type="button"
+          class="sidebar-toggle"
+          :title="sidebarCollapsed ? '展开菜单' : '收起菜单'"
+          @click="sidebarCollapsed = !sidebarCollapsed"
+        >
+          <PanelLeftClose v-if="!sidebarCollapsed" :size="18" />
+          <PanelLeftOpen v-else :size="18" />
+        </button>
       </div>
-      <ToolNav v-model="activeTool" :tools="tools" />
+      <ToolNav v-model="activeTool" :tools="tools" :collapsed="sidebarCollapsed" />
     </aside>
 
     <section class="workspace">
@@ -27,7 +36,14 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { Braces, Clock3, Code2, SplitSquareHorizontal } from 'lucide-vue-next';
+import {
+  Braces,
+  Clock3,
+  Code2,
+  PanelLeftClose,
+  PanelLeftOpen,
+  SplitSquareHorizontal
+} from 'lucide-vue-next';
 import ToolNav from './ToolNav.vue';
 import JsonFormatter from '../tools/JsonFormatter.vue';
 import JsonDiff from '../tools/JsonDiff.vue';
@@ -68,5 +84,6 @@ const tools = [
 type ToolId = (typeof tools)[number]['id'];
 
 const activeTool = ref<ToolId>('json-format');
+const sidebarCollapsed = ref(false);
 const activeMeta = computed(() => tools.find((tool) => tool.id === activeTool.value) ?? tools[0]);
 </script>

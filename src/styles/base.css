@@ -35,6 +35,10 @@ button {
   min-height: 100vh;
 }
 
+.app-layout.nav-collapsed {
+  grid-template-columns: 76px minmax(0, 1fr);
+}
+
 .sidebar {
   border-right: 1px solid #d9dee7;
   background: #ffffff;
@@ -46,6 +50,10 @@ button {
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
+}
+
+.nav-collapsed .brand {
+  justify-content: center;
 }
 
 .brand-mark {
@@ -69,6 +77,24 @@ button {
 
 .brand h1 {
   font-size: 18px;
+}
+
+.sidebar-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-left: auto;
+  border: 1px solid #cfd6e3;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #344054;
+}
+
+.nav-collapsed .brand-copy,
+.nav-collapsed .sidebar-toggle {
+  display: none;
 }
 
 .brand p,
@@ -107,6 +133,15 @@ button {
   border-color: #b8cdf8;
   background: #eaf1ff;
   color: #1d4ed8;
+}
+
+.tool-nav.collapsed .nav-item {
+  justify-content: center;
+  padding: 10px;
+}
+
+.tool-nav.collapsed .nav-item span {
+  display: none;
 }
 
 .workspace {
@@ -257,6 +292,48 @@ button {
   font-size: 13px;
   line-height: 1.5;
   padding: 12px;
+}
+
+.json-code-editor {
+  position: relative;
+  min-height: 360px;
+  border: 1px solid #cfd6e3;
+  border-radius: 8px;
+  background: #fbfcfe;
+  overflow: hidden;
+}
+
+.json-highlight,
+.json-code-input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  overflow: auto;
+  border: 0;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 12px;
+  tab-size: 2;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.json-highlight {
+  color: #111827;
+  pointer-events: none;
+}
+
+.json-code-input {
+  resize: none;
+  background: transparent;
+  color: transparent;
+  caret-color: #111827;
+  outline: none;
+}
+
+.json-code-input::selection {
+  background: rgba(29, 78, 216, 0.22);
 }
 
 .error-text {
@@ -452,9 +529,19 @@ select,
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(220px, auto);
   gap: 12px;
   align-items: stretch;
+}
+
+.timestamp-actions {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.timestamp-actions select {
+  min-width: 170px;
 }
 
 .stat {
@@ -538,5 +625,25 @@ select,
 
   .code-editor {
     min-height: 260px;
+  }
+
+  .json-code-editor {
+    min-height: 260px;
+  }
+
+  .timestamp-actions {
+    flex-wrap: wrap;
+  }
+
+  .app-layout.nav-collapsed {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-collapsed .brand-copy {
+    display: block;
+  }
+
+  .nav-collapsed .sidebar-toggle {
+    display: inline-flex;
   }
 }

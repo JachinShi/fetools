@@ -2,7 +2,11 @@
   <section class="tool-stack">
     <div class="stats-grid">
       <div class="stat">
-        <span>当前本地时间</span>
+        <span>当前模拟时间</span>
+        <strong>{{ zonedCurrent }}</strong>
+      </div>
+      <div class="stat">
+        <span>本地输入格式</span>
         <strong>{{ current.localInput }}</strong>
       </div>
       <div class="stat">
@@ -13,10 +17,21 @@
         <span>毫秒时间戳</span>
         <strong>{{ current.milliseconds }}</strong>
       </div>
-      <button type="button" class="primary-button" @click="refreshNow">
-        <RefreshCcw :size="17" />
-        刷新
-      </button>
+      <div class="timestamp-actions">
+        <select v-model="selectedTimeZone" title="模拟时区">
+          <option v-for="zone in timeZones" :key="zone.value" :value="zone.value">
+            {{ zone.label }}
+          </option>
+        </select>
+        <button type="button" class="primary-button" @click="toggleAutoRefresh">
+          <Pause v-if="autoRefresh" :size="17" />
+          <Play v-else :size="17" />
+          {{ autoRefresh ? '停止' : '继续' }}
+        </button>
+        <button type="button" class="icon-button" title="刷新" @click="refreshNow">
+          <RefreshCcw :size="17" />
+        </button>
+      </div>
     </div>
 
     <section class="tool-grid two-column">
@@ -55,6 +70,10 @@
       </div>
       <dl class="result-list">
         <div>
+          <dt>模拟时区时间</dt>
+          <dd>{{ zonedResult }}</dd>
+        </div>
+        <div>
           <dt>本地输入格式</dt>
           <dd>{{ result.localInput }}</dd>
         </div>
@@ -77,15 +96,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Copy, RefreshCcw } from 'lucide-vue-next';
+import { computed, onBeforeUnmount, ref } from 'vue';
+import { Copy, Pause, Play, RefreshCcw } from 'lucide-vue-next';
 import {
   currentDateParts,
   dateInputToTimestamp,
+  formatInTimeZone,
   timestampToDateParts,
   type DateParts,
   type TimestampUnit
 } from '../utils/time';
+
+const timeZones = [
+  { label: '本地时区', value: Intl.DateTimeFormat().resolvedOptions().timeZone },
+  { label: 'UTC', value: 'UTC' },
+  { label: 'Asia/Shanghai', value: 'Asia/Shanghai' },
+  { label: 'America/New_York', value: 'America/New_York' },
+  { label: 'Europe/London', value: 'Europe/London' },
+  { label: 'Asia/Tokyo', value: 'Asia/Tokyo' }
+];
 
 const current = ref<DateParts>(currentDateParts());
 const result = ref<DateParts>(current.value);
@@ -95,10 +124,32 @@ const dateInput = ref(current.value.localInput);
 const timestampError = ref('');
 const dateError = ref('');
 const status = ref('等待转换');
+const autoRefresh = ref(true);
+const selectedTimeZone = ref(timeZones[0].value);
+const zonedCurrent = computed(() =>
+  formatInTimeZone(new Date(current.value.milliseconds), selectedTimeZone.value)
+);
+const zonedResult = computed(() =>
+  formatInTimeZone(new Date(result.value.milliseconds), selectedTimeZone.value)
+);
+const timer = window.setInterval(() => {
+  if (autoRefresh.value) {
+    current.value = currentDateParts();
+  }
+}, 1000);
+
+onBeforeUnmount(() => {
+  window.clearInterval(timer);
+});
 
 function refreshNow() {
   current.value = currentDateParts();
   status.value = '当前时间已刷新';
+}
+
+function toggleAutoRefresh() {
+  autoRefresh.value = !autoRefresh.value;
+  status.value = autoRefresh.value ? '已继续自动刷新' : '已停止自动刷新';
 }
 
 function convertTimestamp() {
