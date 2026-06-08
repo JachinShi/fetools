@@ -1,5 +1,9 @@
 <template>
-  <section class="tool-grid two-column">
+  <section
+    class="formatter-layout"
+    :class="{ stacked: layoutMode === 'vertical' }"
+    :style="layoutStyle"
+  >
     <div class="panel">
       <div class="panel-header">
         <h3>输入</h3>
@@ -19,10 +23,28 @@
       <p v-if="error" class="error-text">{{ error }}</p>
     </div>
 
+    <div
+      v-if="layoutMode === 'horizontal'"
+      class="formatter-resizer"
+      role="separator"
+      aria-label="调整输入和解析内容宽度"
+      aria-orientation="vertical"
+      @pointerdown="startResize"
+    ></div>
+
     <div class="panel">
       <div class="panel-header">
         <h3>解析内容</h3>
         <div class="toolbar">
+          <button
+            type="button"
+            class="icon-button"
+            :title="layoutMode === 'horizontal' ? '上下排列' : '左右排列'"
+            @click="toggleLayout"
+          >
+            <Rows3 v-if="layoutMode === 'horizontal'" :size="17" />
+            <Columns2 v-else :size="17" />
+          </button>
           <button type="button" class="icon-button" title="复制 JSON" @click="copyOutput">
             <Copy :size="17" />
           </button>
@@ -42,8 +64,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue';
-import { Copy, Minimize2, Trash2, Wand2 } from 'lucide-vue-next';
+import { computed, ref, shallowRef } from 'vue';
+import { Columns2, Copy, Minimize2, Rows3, Trash2, Wand2 } from 'lucide-vue-next';
 import JsonTree from '../components/JsonTree.vue';
 import {
   compactJson,
@@ -59,6 +81,16 @@ const output = ref('');
 const parsedValue = shallowRef<JsonValue | null>(null);
 const error = ref('');
 const status = ref('等待处理');
+const layoutMode = ref<'horizontal' | 'vertical'>('horizontal');
+const leftWidth = ref(50);
+const layoutStyle = computed(() =>
+  layoutMode.value === 'horizontal'
+    ? {
+        '--formatter-left': `${leftWidth.value}%`,
+        '--formatter-right': `${100 - leftWidth.value}%`
+      }
+    : undefined
+);
 
 function applyResult(result: ReturnType<typeof formatJson>) {
   if (result.ok) {
@@ -87,6 +119,34 @@ function clearAll() {
   parsedValue.value = null;
   error.value = '';
   status.value = '已清空';
+}
+
+function toggleLayout() {
+  layoutMode.value = layoutMode.value === 'horizontal' ? 'vertical' : 'horizontal';
+}
+
+function startResize(event: PointerEvent) {
+  const container = (event.currentTarget as HTMLElement).parentElement;
+  if (!container) {
+    return;
+  }
+
+  const bounds = container.getBoundingClientRect();
+  const pointerId = event.pointerId;
+  (event.currentTarget as HTMLElement).setPointerCapture(pointerId);
+
+  function move(moveEvent: PointerEvent) {
+    const next = ((moveEvent.clientX - bounds.left) / bounds.width) * 100;
+    leftWidth.value = Math.min(75, Math.max(25, next));
+  }
+
+  function stop() {
+    window.removeEventListener('pointermove', move);
+    window.removeEventListener('pointerup', stop);
+  }
+
+  window.addEventListener('pointermove', move);
+  window.addEventListener('pointerup', stop, { once: true });
 }
 
 async function copyOutput() {

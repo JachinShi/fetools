@@ -153,6 +153,43 @@ button {
   gap: 16px;
 }
 
+.formatter-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(240px, var(--formatter-left, 50%)) 10px
+    minmax(240px, var(--formatter-right, 50%));
+  gap: 0;
+  align-items: stretch;
+}
+
+.formatter-layout.stacked {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.formatter-layout > .panel {
+  min-width: 0;
+}
+
+.formatter-resizer {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.formatter-resizer::before {
+  content: "";
+  width: 2px;
+  border-radius: 999px;
+  background: #cfd6e3;
+}
+
+.formatter-resizer:hover::before {
+  background: #1d4ed8;
+}
+
 .panel {
   min-width: 0;
   border: 1px solid #d9dee7;
@@ -322,7 +359,7 @@ select,
 }
 
 .tree-node {
-  min-width: max-content;
+  min-width: 0;
 }
 
 .tree-line {
@@ -330,7 +367,9 @@ select,
   align-items: center;
   gap: 4px;
   min-height: 24px;
-  white-space: nowrap;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .tree-line:hover .tree-actions {
@@ -339,6 +378,7 @@ select,
 
 .tree-children {
   margin-left: 20px;
+  min-width: 0;
 }
 
 .tree-toggle,
@@ -380,14 +420,17 @@ select,
 
 .tree-summary {
   color: #667085;
+  overflow-wrap: anywhere;
 }
 
 .json-key {
   color: #7c3aed;
+  overflow-wrap: anywhere;
 }
 
 .json-string {
   color: #047857;
+  overflow-wrap: anywhere;
 }
 
 .json-number {
@@ -404,6 +447,7 @@ select,
 
 .json-punctuation {
   color: #475467;
+  flex: 0 0 auto;
 }
 
 .stats-grid {
@@ -473,9 +517,18 @@ select,
   .workspace-header,
   .two-column,
   .split-editors,
+  .formatter-layout,
   .stats-grid,
   .diff-row {
     grid-template-columns: 1fr;
+  }
+
+  .formatter-layout {
+    gap: 16px;
+  }
+
+  .formatter-resizer {
+    display: none;
   }
 
   .workspace-header {
