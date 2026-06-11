@@ -82,7 +82,7 @@ const output = ref('');
 const parsedValue = shallowRef<JsonValue | null>(null);
 const error = ref('');
 const status = ref('等待处理');
-const layoutMode = ref<'horizontal' | 'vertical'>('horizontal');
+const layoutMode = ref<'horizontal' | 'vertical'>('vertical');
 const leftWidth = ref(50);
 const layoutStyle = computed(() =>
   layoutMode.value === 'horizontal'

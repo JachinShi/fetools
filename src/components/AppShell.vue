@@ -28,7 +28,9 @@
         <p>{{ activeMeta.description }}</p>
       </header>
 
-      <component :is="activeMeta.component" />
+      <KeepAlive>
+        <component :is="activeMeta.component" />
+      </KeepAlive>
     </section>
   </main>
 </template>
